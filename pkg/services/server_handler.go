@@ -15,29 +15,21 @@ func CheckServerRole() {
 		return
 	}
 
-	if serverID == "" {
-		result, err := config.Conn.Redis().SetNX(config.KeyPublisher, config.Conn.ServerID, 2*time.Second).Result()
-
-		if err != nil {
+	switch serverID {
+	case config.Conn.ServerID:
+		if err := config.Conn.Redis().Expire(config.KeyPublisher, 2*time.Second).Err(); err != nil {
 			log.Println(err)
 			return
 		}
 
-		if result == true {
-			config.Conn.ServerRole = config.RoleGeneratorMessages
-		} else {
-			config.Conn.ServerRole = config.RoleHandlerMessages
-		}
-	} else {
-		if serverID == config.Conn.ServerID {
-			if err := config.Conn.Redis().Expire(config.KeyPublisher, 2*time.Second).Err(); err != nil {
-				log.Println(err)
-				return
-			}
+		config.Conn.ServerRole = config.RoleGeneratorMessages
+	default:
+		config.Conn.ServerRole = config.RoleHandlerMessages
 
+		if result, err := config.Conn.Redis().SetNX(config.KeyPublisher, config.Conn.ServerID, 2*time.Second).Result(); err != nil {
+			log.Println(err)
+		} else if result == true {
 			config.Conn.ServerRole = config.RoleGeneratorMessages
-		} else {
-			config.Conn.ServerRole = config.RoleHandlerMessages
 		}
 	}
 }
