@@ -21,6 +21,8 @@ func main() {
 			},
 		},
 		Action: func(c *cli.Context) error {
+			defer config.Conn.Redis().Close()
+
 			if c.Bool("getErrors") {
 				services.GetListOfWrongMessages()
 				return nil
