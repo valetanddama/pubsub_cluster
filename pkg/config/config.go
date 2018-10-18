@@ -23,3 +23,9 @@ func (c *Config) Redis() *redis.Client {
 
 	return c.redis
 }
+
+func (c *Config) Ping() {
+	if err := c.Redis().Ping().Err(); err != nil {
+		c.redis = nil
+	}
+}

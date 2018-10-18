@@ -32,6 +32,7 @@ func main() {
 			getMessage := time.NewTicker(500 * time.Millisecond).C
 			sendMessage := time.NewTicker(500 * time.Millisecond).C
 			checkServerRole := time.NewTicker(500 * time.Millisecond).C
+			checkConnections := time.NewTicker(time.Minute).C
 
 			for {
 				select {
@@ -41,6 +42,8 @@ func main() {
 					services.SendMessage()
 				case <-checkServerRole:
 					services.CheckServerRole()
+				case <-checkConnections:
+					config.Conn.Ping()
 				}
 			}
 
