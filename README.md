@@ -17,5 +17,4 @@ BenchmarkSendMessageForRoleGenerator-8   30000         47023  ns/op     240 B/op
 BenchmarkGetMessageForRoleHandler-8      20000         54696  ns/op     516 B/op     15 allocs/op
 BenchmarkCheckServerRole-8               20000         92195  ns/op     392 B/op     13 allocs/op
 BenchmarkGetRedisConn-8                  1000000000    2.53   ns/op     0   B/op     0  allocs/op
-BenchmarkPing-8                          30000         48672  ns/op     148 B/op     5  allocs/op
 ```
